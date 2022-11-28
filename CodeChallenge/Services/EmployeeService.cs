@@ -71,7 +71,6 @@ namespace CodeChallenge.Services
                 return null;
             }
 
-            //Thread.Sleep(5000);
            
             Employee foundEmployee = _employeeRepository.GetById(id);
             //checking if the id is actually in the database
@@ -87,6 +86,7 @@ namespace CodeChallenge.Services
             return reportingStructure;
         }
 
+        //recursion so we can count the number of reportees and indirect reportees 
         private int GetNumOfReports(Employee employee)
         {
             int reporteeCount = 0;
