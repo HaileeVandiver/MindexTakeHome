@@ -70,9 +70,6 @@ namespace CodeChallenge.Services
             {
                 return null;
             }
-
-            //keep track of how many reportees
-            int counter = 0;
            
             Employee foundEmployee = _employeeRepository.GetById(id);
             //checking if the id is actually in the database
