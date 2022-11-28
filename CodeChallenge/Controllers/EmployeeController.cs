@@ -58,5 +58,22 @@ namespace CodeChallenge.Controllers
 
             return Ok(newEmployee);
         }
+        [HttpGet("{id}/NumberOfReports", Name = "GetReportsbyId")]
+        public IActionResult GetReportsbyId(String id)
+        {
+            _logger.LogDebug($"Recieved get request for number of reportees '{id}'");
+
+            //create ReportingStructure object using Id of employee
+            ReportingStructure reportingStructure = _employeeService.GetReportingStructureById(id);
+
+            //check that employeeid isn't null
+            if (reportingStructure == null)
+            {
+                //IRL would want to prevent attacks by ensuring input is sanitzed 
+                return NotFound();
+            }
+           
+            return Ok(reportingStructure);
+        }
     }
 }

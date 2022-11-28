@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace CodeChallenge.Models
 {
     public class Compensation
     {
-        public Employee Employee { get; set; }
+        public string Employee { get; set; }
         public int Salary { get; set; }
 
         //would this be better as a DateTime? 
@@ -12,4 +13,4 @@ namespace CodeChallenge.Models
 
 
     }
-}
+}   

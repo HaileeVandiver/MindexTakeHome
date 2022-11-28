@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using CodeChallenge.Models;
 using Microsoft.Extensions.Logging;
 using CodeChallenge.Repositories;
+using System.Threading;
 
 namespace CodeChallenge.Services
 {
@@ -62,25 +63,62 @@ namespace CodeChallenge.Services
 
         public ReportingStructure GetReportingStructureById(string id)
         {
-            ReportingStructure countReportees= new();
+            //bonus points: how would you deal with a primary key exception -o- put a primary key constraint on database
+            ReportingStructure reportingStructure = new();
+            //checking if the string is not null or empty 
+            if (String.IsNullOrEmpty(id))
+            {
+                return null;
+            }
 
             //keep track of how many reportees
             int counter = 0;
            
-            //check if employee id is empty or null 
-            if (!String.IsNullOrEmpty(id))
+            Employee foundEmployee = _employeeRepository.GetById(id);
+            //checking if the id is actually in the database
+            if (foundEmployee == null) 
             {
-                //if not add to ReportingStructure object 
-                countReportees.Employee = _employeeRepository.GetById(id); 
-               
+                return null; 
             }
+
+            //build reporting structure 
+            reportingStructure.Employee = foundEmployee.EmployeeId; 
+            reportingStructure.NumberOfReports = GetNumOfReports(foundEmployee);
+
+            return reportingStructure;
+        }
             //foreach loop for counting reportees 
 
-
-            
-
-
+        //recursion so we can count the number of reportees and indirect reportees 
+        private int GetNumOfReports(Employee employee)
+        {
+            int reporteeCount = 0;
+            if (employee == null)
+            {
+                return 0;
+            }
+            if (employee.DirectReports == null)
+            {
+                return 0;
+            }
+            reporteeCount += employee.DirectReports.Count;
+            foreach (Employee reportee in employee.DirectReports)
+            {
+                if (reportee != null)
+                {
+                    reporteeCount += GetNumOfReports(reportee);
+                }
+            }
+            return reporteeCount;
         }
-    }
+
+
+
+
+
+
+
+
     }
 }
+    
